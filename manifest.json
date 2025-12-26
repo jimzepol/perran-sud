@@ -1,0 +1,9 @@
+{
+  "name": "PERRAN SUD",
+  "short_name": "PERRAN SUD",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ff0080",
+  "theme_color": "#ff0080",
+  "icons": []
+}
