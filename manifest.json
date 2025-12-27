@@ -1,9 +1,1 @@
-{
-  "name": "PERRAN SUD",
-  "short_name": "PERRAN SUD",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#ff0080",
-  "theme_color": "#ff0080",
-  "icons": []
-}
+{"name": "PERRAN SUD","short_name": "PERRAN","description": "Application de suivi PERRAN SUD","start_url": "./index.html","display": "standalone","orientation": "portrait","background_color": "#ff0080","theme_color": "#7928ca","icons": [{"src": "icon.png","sizes": "512x512","type": "image/png","purpose": "any maskable"},{"src": "icon.svg","sizes": "any","type": "image/svg+xml","purpose": "any"}]}
