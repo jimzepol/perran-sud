@@ -2,89 +2,167 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Blocage du zoom indésirable pour l'expérience PWA -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PERRAN SUD</title>
 
 <style>
-body{
-  margin:0;
-  font-family:"Comic Sans MS",system-ui,sans-serif;
-  background:linear-gradient(135deg,#ff0080,#7928ca);
-  color:#fff;
-  text-align:center;
-}
-.page{display:none;padding:12px 10px 190px}
-.page.active{display:block}
-
-button{
-  border:none;border-radius:20px;
-  padding:16px;font-size:20px;
-  margin:6px;cursor:pointer;
-}
-button:disabled{opacity:.4}
-
-.big{
-  font-size:60px;
-  width:140px;height:140px;
-  font-weight:bold;
+/* Désactivation du zoom au double-clic sur les éléments interactifs */
+html, body {
+  touch-action: manipulation;
 }
 
-.stack{display:flex;flex-direction:column;align-items:center;gap:6px}
-.message{font-size:20px;min-height:44px}
-.counter{font-size:18px}
+body {
+  margin: 0;
+  font-family: "Comic Sans MS", system-ui, sans-serif;
+  background: linear-gradient(135deg, #ff0080, #7928ca);
+  color: #fff;
+  text-align: center;
+  overflow-x: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.page { display: none; padding: 12px 10px 190px; }
+.page.active { display: block; }
+
+button {
+  border: none; border-radius: 20px;
+  padding: 16px; font-size: 20px;
+  margin: 6px; cursor: pointer;
+  touch-action: manipulation;
+}
+button:disabled { opacity: .4; }
+
+.big {
+  font-size: 60px;
+  width: 140px; height: 140px;
+  font-weight: bold;
+}
+
+.stack { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.message { font-size: 20px; min-height: 44px; }
+.counter { font-size: 18px; }
+
+/* Nouveau style pour le message d'honnêteté */
+.honesty-msg {
+  font-size: 14px;
+  font-style: italic;
+  opacity: 0.9;
+  margin: 10px 0;
+  color: #ffd1e8;
+  font-weight: bold;
+}
 
 /* Animations */
-@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
-@keyframes shake{0%{transform:rotate(0)}25%{transform:rotate(6deg)}50%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}100%{transform:rotate(0)}}
-@keyframes rage{
-  0%{transform:scale(1)}
-  25%{transform:scale(1.3) rotate(10deg)}
-  50%{transform:scale(1.3) rotate(-10deg)}
-  75%{transform:scale(1.3) rotate(10deg)}
-  100%{transform:scale(1)}
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes shake { 0% { transform: rotate(0); } 25% { transform: rotate(6deg); } 50% { transform: rotate(-6deg); } 75% { transform: rotate(6deg); } 100% { transform: rotate(0); } }
+@keyframes rage {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.3) rotate(10deg); }
+  50% { transform: scale(1.3) rotate(-10deg); }
+  75% { transform: scale(1.3) rotate(10deg); }
+  100% { transform: scale(1); }
 }
-.animate{animation:pulse .25s,shake .25s}
-.rage{animation:rage .45s}
+.animate { animation: pulse .25s, shake .25s; }
+.rage { animation: rage .45s; }
 
-/* Badge dérapage */
-#derapage{
-  display:none;
-  background:#ff0000;
-  padding:10px 18px;
-  border-radius:30px;
-  font-size:18px;
-  font-weight:bold;
-  margin-bottom:8px;
-  animation:pulse .8s infinite;
-}
-
-.stat-box{
-  background:rgba(0,0,0,.35);
-  margin:8px;
-  padding:10px;
-  border-radius:14px;
-  font-size:17px;
+#derapage {
+  display: none;
+  background: #ff0000;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  animation: pulse .8s infinite;
 }
 
-nav{
-  position:fixed;bottom:0;left:0;right:0;
-  background:#000;display:flex;z-index:10;
-}
-nav button{flex:1;background:none;color:#fff}
-
-#app-signature{
-  position:fixed;bottom:52px;left:0;right:0;
-  font-size:12px;opacity:.85;z-index:1000;
+.stat-box {
+  background: rgba(0, 0, 0, .35);
+  margin: 8px;
+  padding: 10px;
+  border-radius: 14px;
+  font-size: 17px;
 }
 
-#pseudoInput{
-  font-size:18px;padding:14px;border-radius:18px;
-  border:none;text-align:center;
-  font-weight:bold;text-transform:uppercase;
-  width:80%;max-width:300px;
-  box-shadow:0 0 0 3px rgba(255,255,255,0.6);
+/* Trophées Section */
+.trophy-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 15px;
 }
-.confirm{background:#ff0000}
+.trophy-item {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px 15px;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: 20px;
+  transition: all 0.3s ease;
+}
+
+nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #000; display: flex; z-index: 10;
+}
+nav button { flex: 1; background: none; color: #fff; }
+
+#app-signature {
+  position: fixed; bottom: 52px; left: 0; right: 0;
+  font-size: 12px; opacity: .85; z-index: 1000;
+}
+
+#pseudoInput {
+  font-size: 18px; padding: 14px; border-radius: 18px;
+  border: none; text-align: center;
+  font-weight: bold; text-transform: uppercase;
+  width: 80%; max-width: 300px;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6);
+}
+
+.confirm {
+  background: #ff0000;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Modals */
+#customModal, #rewardModal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #222;
+  padding: 25px;
+  border-radius: 20px;
+  width: 85%;
+  max-width: 350px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  position: relative;
+}
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #ff0080;
+  padding: 5px;
+}
+.modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+.modal-btns button { flex: 1; margin: 0; }
+.btn-cancel { background: #555; color: white; }
+
+/* Style des récompenses */
+.reward-icons { font-size: 60px; margin: 20px 0; letter-spacing: 10px; }
+.reward-text { font-size: 18px; color: #fff; line-height: 1.4; }
 </style>
 </head>
 
@@ -92,16 +170,42 @@ nav button{flex:1;background:none;color:#fff}
 
 <div id="app-signature">By Jean-Jesus Bernardo De Perran</div>
 
-<!-- LOGIN -->
+<!-- Modal de Confirmation -->
+<div id="customModal">
+  <div class="modal-content">
+    <h3 id="modalTitle">Confirmation</h3>
+    <p id="modalText">Voulez-vous continuer ?</p>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">NON</button>
+      <button class="confirm" id="modalConfirmBtn">OUI</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Récompense -->
+<div id="rewardModal">
+  <div class="modal-content">
+    <span class="close-modal" onclick="closeRewardModal()">&times;</span>
+    <h2 style="color:#ffcc00; margin-top:10px;">BRAVO ! 🏆</h2>
+    <div class="reward-icons" id="rewardIcons"></div>
+    <p class="reward-text" id="rewardMsg"></p>
+    <br>
+    <button class="confirm" style="width:100%" onclick="closeRewardModal()">OK !</button>
+  </div>
+</div>
+
+<!-- PAGE LOGIN -->
 <div id="page-login" class="page">
   <h1>PERRAN SUD</h1>
   <p>Entre ton pseudo 🍻</p>
+  <!-- Ajout du message d'honnêteté -->
+  <div class="honesty-msg">"Soyez honnête avec vous même, ne vous mentez pas"</div>
   <input id="pseudoInput" placeholder="PSEUDO">
   <br><br>
   <button id="enterBtn" onclick="savePseudo()" disabled>ENTRER</button>
 </div>
 
-<!-- ACTION -->
+<!-- PAGE ACTION -->
 <div id="page-action" class="page">
   <h2 id="welcome"></h2>
   <div id="derapage">🚨 MODE DÉRAPAGE 🚨</div>
@@ -117,20 +221,28 @@ nav button{flex:1;background:none;color:#fff}
   </div>
 </div>
 
-<!-- STATS -->
+<!-- PAGE STATS -->
 <div id="page-stats" class="page">
   <h2>📊 Statistiques</h2>
+  <!-- Ajout du message d'honnêteté -->
+  <div class="honesty-msg">"Soyez honnête avec vous même, ne vous mentez pas"</div>
+  
+  <div class="trophy-container">
+    <div class="trophy-item"><span id="totalStars">0</span> ⭐</div>
+    <div class="trophy-item"><span id="totalClovers">0</span> 🍀</div>
+  </div>
+
   <div id="stats"></div>
 </div>
 
-<!-- RESET -->
+<!-- PAGE REGLAGES -->
 <div id="page-reset" class="page">
-  <h2>⚙️ Remise à zéro</h2>
-  <button class="confirm" onclick="resetPeriod('day')">RAZ Journée</button><br>
-  <button class="confirm" onclick="resetPeriod('week')">RAZ Semaine</button><br>
-  <button class="confirm" onclick="resetPeriod('month')">RAZ Mois</button><br>
-  <button class="confirm" onclick="resetPeriod('year')">RAZ Année</button><br>
-  <button class="confirm" onclick="deleteAccount()">SUPPRIMER LE COMPTE</button>
+  <h2>⚙️ Réglages</h2>
+  <button class="confirm" onclick="askReset('day')">RAZ Journée</button><br>
+  <button class="confirm" onclick="askReset('week')">RAZ Semaine</button><br>
+  <button class="confirm" onclick="askReset('month')">RAZ Mois</button><br>
+  <button class="confirm" onclick="askReset('year')">RAZ Année</button><br>
+  <button class="confirm" onclick="askDelete()">SUPPRIMER LE COMPTE</button>
 </div>
 
 <nav>
@@ -140,87 +252,190 @@ nav button{flex:1;background:none;color:#fff}
 </nav>
 
 <script>
-/* ===== LOGIN ===== */
-const input=pseudoInput, enterBtn=document.getElementById("enterBtn");
-input.addEventListener("input",()=>{
-  input.value=input.value.toUpperCase();
-  enterBtn.disabled=input.value.trim()==="";
-});
-input.addEventListener("keydown",e=>{
-  if(e.key==="Enter"&&!enterBtn.disabled)savePseudo();
-});
+/* ===== GESTION MODALS ===== */
+let modalAction = null;
+function showConfirm(title, text, action) {
+  document.getElementById("modalTitle").innerText = title;
+  document.getElementById("modalText").innerText = text;
+  document.getElementById("customModal").style.display = "flex";
+  modalAction = action;
+}
+function closeModal() {
+  document.getElementById("customModal").style.display = "none";
+}
+document.getElementById("modalConfirmBtn").onclick = () => {
+  if (modalAction) modalAction();
+  closeModal();
+};
 
-/* ===== AUDIO ===== */
+function closeRewardModal() {
+  document.getElementById("rewardModal").style.display = "none";
+  renderStats();
+}
+
+/* ===== AUDIO CORE (SYNTHÈSE) ===== */
 let ctx;
-function audioCtx(){
-  if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)();
+function audioCtx() {
+  if (!ctx) {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+  }
   return ctx;
 }
-function playTrumpet(power){
-  const c=audioCtx(),o=c.createOscillator(),g=c.createGain();
-  o.type="square";
-  o.frequency.setValueAtTime(power?900:520,c.currentTime);
-  g.gain.setValueAtTime(0.001,c.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.6,c.currentTime+0.05);
-  g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.3);
-  o.connect(g);g.connect(c.destination);
-  o.start();o.stop(c.currentTime+0.3);
+
+function playGlassSound(count) {
+  const c = audioCtx();
+  const mainGain = c.createGain();
+  mainGain.connect(c.destination);
+  if (count >= 5) {
+    mainGain.gain.setValueAtTime(0.8, c.currentTime);
+    mainGain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 1.2);
+    [2100, 2350, 2700, 3100].forEach(f => {
+      const o = c.createOscillator();
+      o.type = "sine";
+      o.frequency.setValueAtTime(f, c.currentTime);
+      o.frequency.exponentialRampToValueAtTime(f * 0.5, c.currentTime + 0.1);
+      o.connect(mainGain); o.start(); o.stop(c.currentTime + 0.2);
+    });
+    const bufferSize = c.sampleRate * 1.0;
+    const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+    const dataArr = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        const decay = Math.pow(1 - i / bufferSize, 2);
+        dataArr[i] = (Math.random() * 2 - 1) * decay;
+    }
+    const noise = c.createBufferSource();
+    noise.buffer = buffer;
+    const filter = c.createBiquadFilter();
+    filter.type = "highpass"; filter.frequency.setValueAtTime(1500, c.currentTime);
+    noise.connect(filter); filter.connect(mainGain); noise.start();
+  } else {
+    mainGain.gain.setValueAtTime(0.6, c.currentTime);
+    mainGain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.4);
+    const o = c.createOscillator();
+    o.frequency.setValueAtTime(2200, c.currentTime);
+    o.connect(mainGain); o.start(); o.stop(c.currentTime + 0.4);
+  }
 }
-function playExplosion(power){
-  const c=audioCtx();
-  const b=c.createBuffer(1,c.sampleRate*0.6,c.sampleRate);
-  const d=b.getChannelData(0);
-  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
-  const n=c.createBufferSource(),g=c.createGain();
-  n.buffer=b;
-  g.gain.setValueAtTime(power?1.4:1,c.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.6);
-  n.connect(g);g.connect(c.destination);
-  n.start();n.stop(c.currentTime+0.6);
+
+function playSmokeSound(count) {
+  const c = audioCtx();
+  const mainGain = c.createGain();
+  mainGain.connect(c.destination);
+  if (count >= 6) {
+    const duration = 1.2;
+    mainGain.gain.setValueAtTime(0, c.currentTime);
+    mainGain.gain.linearRampToValueAtTime(1.2, c.currentTime + 0.1);
+    mainGain.gain.linearRampToValueAtTime(0.4, c.currentTime + 0.8);
+    mainGain.gain.linearRampToValueAtTime(0, c.currentTime + duration);
+    const o = c.createOscillator();
+    o.type = "sawtooth";
+    const baseFreq = 55 + (Math.random() * 10);
+    o.frequency.setValueAtTime(baseFreq, c.currentTime);
+    o.frequency.linearRampToValueAtTime(baseFreq * 0.5, c.currentTime + duration);
+    const lfo = c.createOscillator();
+    lfo.type = "square"; lfo.frequency.setValueAtTime(22, c.currentTime);
+    const lfoGain = c.createGain();
+    lfoGain.gain.setValueAtTime(45, c.currentTime);
+    lfo.connect(lfoGain); lfoGain.connect(o.frequency);
+    const filter = c.createBiquadFilter();
+    filter.type = "lowpass"; filter.frequency.setValueAtTime(600, c.currentTime); filter.Q.setValueAtTime(10, c.currentTime);
+    o.connect(filter); filter.connect(mainGain); lfo.start(); o.start();
+    lfo.stop(c.currentTime + duration); o.stop(c.currentTime + duration);
+  } else {
+    const duration = 1.5;
+    mainGain.gain.setValueAtTime(1.5, c.currentTime);
+    mainGain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + duration);
+    const kick = c.createOscillator();
+    kick.type = "triangle"; kick.frequency.setValueAtTime(120, c.currentTime);
+    kick.frequency.exponentialRampToValueAtTime(30, c.currentTime + 0.4); kick.connect(mainGain);
+    const bufferSize = c.sampleRate * duration;
+    const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+    const dataArr = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) dataArr[i] = (Math.random() * 2 - 1);
+    const noise = c.createBufferSource(); noise.buffer = buffer;
+    const nFilter = c.createBiquadFilter(); nFilter.type = "lowpass";
+    nFilter.frequency.setValueAtTime(800, c.currentTime);
+    nFilter.frequency.exponentialRampToValueAtTime(40, c.currentTime + duration);
+    noise.connect(nFilter); nFilter.connect(mainGain); kick.start(); noise.start();
+    kick.stop(c.currentTime + duration); noise.stop(c.currentTime + duration);
+  }
 }
 
-/* ===== DATA ===== */
-let data=JSON.parse(localStorage.getItem("perranData"))||{history:[]};
-const save=()=>localStorage.setItem("perranData",JSON.stringify(data));
+/* ===== GESTION DES DONNÉES ===== */
+let data = JSON.parse(localStorage.getItem("perranData")) || { 
+  history: [], 
+  stars: 0, 
+  clovers: 0, 
+  lastRewardDate: "" 
+};
+const save = () => localStorage.setItem("perranData", JSON.stringify(data));
 
-/* ===== MESSAGES ===== */
-const beerMsgs=[
-  "TCHIN !","JAMAIS SUR DEUX PATTES","TU NE CONDUIS PAS DE SUITE",
-  "OK TU BOIS QUOI ?","C’EST FÊTE ?","ON VA CHANTER ?",
-  "LES OIES SAUVAGES !!","TU PARLES ÉGYPTIEN",
-  "T’AS OUBLIÉ LES CONSONNES","T’AS VOMI SUR TES POMPES",
-  "C’EST BON T’ES SEC"
-];
-const smokeMsgs=[
-  "ACCRO ?","ENCORE UNE ?","COMBIEN TU VAS EN FUMER ?",
-  "T’AS TON QUOTA","C’EST JUSTE RAISONNABLE","TU TOUSSES TONTON",
-  "TA LANGUE EST JAUNE","GAINSBOURG STYLE",
-  "TAIN*** ENCORE ?","T’Y LAISSES TA PAYE",
-  "VA TE LAVER LES POUMONS","TU PUES DU BEC","HALEINE DE TRAPPEUR"
-];
+const beerMsgs = ["TCHIN !","JAMAIS SUR DEUX PATTES","TU NE CONDUIS PAS DE SUITE","OK TU BOIS QUOI ?","C’EST FÊTE ?","ON VA CHANTER ?","LES OIES SAUVAGES !!","TU PARLES ÉGYPTIEN","T’AS OUBLIÉ LES CONSONNES","T’AS VOMI SUR TES POMPES","C’EST BON T’ES SEC"];
+const smokeMsgs = ["ACCRO ?","ENCORE UNE ?","COMBIEN TU VAS EN FUMER ?","T’AS TON QUOTA","C’EST JUSTE RAISONNABLE","TU TOUSSES TONTON","TA LANGUE EST JAUNE","GAINSBOURG STYLE","TAIN*** ENCORE ?","T’Y LAISSES TA PAYE","VA TE LAVER LES POUMONS","TU PUES DU BEC","HALEINE DE TRAPPEUR"];
 
-/* ===== DATES / STATS ===== */
-const startDay=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
-const startWeek=d=>{let x=new Date(d);x.setHours(0,0,0,0);let n=x.getDay()||7;x.setDate(x.getDate()-n+1);return x.getTime();}
-const startMonth=d=>new Date(d.getFullYear(),d.getMonth(),1).getTime();
-const startYear=d=>new Date(d.getFullYear(),0,1).getTime();
+const startDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+const startWeek = d => { let x = new Date(d); x.setHours(0,0,0,0); let n = x.getDay()||7; x.setDate(x.getDate()-n+1); return x.getTime(); }
+const startMonth = d => new Date(d.getFullYear(), d.getMonth(), 1).getTime();
+const startYear = d => new Date(d.getFullYear(), 0, 1).getTime();
+const count = (type, from, to) => data.history.filter(e => e.type === type && e.time >= from && e.time <= to).length;
 
-const count=(type,from,to)=>data.history.filter(e=>e.type===type&&e.time>=from&&e.time<=to).length;
+function getStats() {
+  const n = new Date();
+  const tStart = startDay(n);
+  const yStart = startDay(new Date(n.getTime() - 86400000));
+  const dbStart = startDay(new Date(n.getTime() - 172800000));
 
-function getStats(){
-  const n=new Date();
-  return{
-    today:{b:count("beer",startDay(n),Date.now()),s:count("smoke",startDay(n),Date.now())},
-    yesterday:{b:count("beer",startDay(new Date(n-86400000)),startDay(n)),
-               s:count("smoke",startDay(new Date(n-86400000)),startDay(n))},
-    week:{b:count("beer",startWeek(n),Date.now()),s:count("smoke",startWeek(n),Date.now())},
-    month:{b:count("beer",startMonth(n),Date.now()),s:count("smoke",startMonth(n),Date.now())},
-    year:{b:count("beer",startYear(n),Date.now()),s:count("smoke",startYear(n),Date.now())}
+  return {
+    today: { b: count("beer", tStart, Date.now()), s: count("smoke", tStart, Date.now()) },
+    yesterday: { b: count("beer", yStart, tStart), s: count("smoke", yStart, tStart) },
+    dayBefore: { b: count("beer", dbStart, yStart), s: count("smoke", dbStart, yStart) },
+    week: { b: count("beer", startWeek(n), Date.now()), s: count("smoke", startWeek(n), Date.now()) },
+    month: { b: count("beer", startMonth(n), Date.now()), s: count("smoke", startMonth(n), Date.now()) },
+    year: { b: count("beer", startYear(n), Date.now()), s: count("smoke", startYear(n), Date.now()) }
   };
 }
-function renderStats(){
-  const s=getStats();
-  stats.innerHTML=`
+
+function checkRewards() {
+  const s = getStats();
+  const now = new Date();
+  const yesterdayString = new Date(now.getTime() - 86400000).toDateString();
+  
+  // Si le gain d'hier n'a pas encore été traité
+  if (data.lastRewardDate !== yesterdayString) {
+    let earnedStar = false;
+    let earnedClover = false;
+
+    // Comparaison : Hier vs Avant-Hier
+    if (s.dayBefore.b > 0 && s.yesterday.b < s.dayBefore.b) {
+      data.stars = (data.stars || 0) + 1;
+      earnedStar = true;
+    }
+    if (s.dayBefore.s > 0 && s.yesterday.s < s.dayBefore.s) {
+      data.clovers = (data.clovers || 0) + 1;
+      earnedClover = true;
+    }
+
+    if (earnedStar || earnedClover) {
+      const icons = (earnedStar ? "⭐ " : "") + (earnedClover ? "🍀" : "");
+      const msg = "Ta consommation d'hier était plus basse que celle d'avant-hier !<br><b>Ton corps te remercie. 🍻</b>";
+      document.getElementById("rewardIcons").innerHTML = icons;
+      document.getElementById("rewardMsg").innerHTML = msg;
+      document.getElementById("rewardModal").style.display = "flex";
+      vibrate([100, 50, 100]);
+    }
+
+    data.lastRewardDate = yesterdayString;
+    save();
+  }
+}
+
+function renderStats() {
+  const s = getStats();
+  document.getElementById("totalStars").innerText = data.stars || 0;
+  document.getElementById("totalClovers").innerText = data.clovers || 0;
+  
+  document.getElementById("stats").innerHTML = `
     <div class="stat-box">Aujourd’hui 🍺 ${s.today.b} / 🚬 ${s.today.s}</div>
     <div class="stat-box">Hier 🍺 ${s.yesterday.b} / 🚬 ${s.yesterday.s}</div>
     <div class="stat-box">Semaine 🍺 ${s.week.b} / 🚬 ${s.week.s}</div>
@@ -228,82 +443,83 @@ function renderStats(){
     <div class="stat-box">Année 🍺 ${s.year.b} / 🚬 ${s.year.s}</div>`;
 }
 
-/* ===== MODE DÉRAPAGE ===== */
-function updateDerapage(){
-  const s=getStats().today;
-  derapage.style.display = (s.b>=10 || s.s>=10) ? "block" : "none";
+function updateDerapage() {
+  const s = getStats().today;
+  document.getElementById("derapage").style.display = (s.b >= 10 || s.s >= 10) ? "block" : "none";
 }
 
-/* ===== NAV ===== */
-function savePseudo(){
-  data.pseudo=input.value.trim();
-  save();init();
-}
-function showPage(p){
-  if(!data.pseudo&&p!=="login"){alert("Pseudo obligatoire");return;}
-  document.querySelectorAll(".page").forEach(e=>e.classList.remove("active"));
-  document.getElementById("page-"+p).classList.add("active");
-  if(p==="stats") renderStats();
-}
+const input = document.getElementById("pseudoInput"), enterBtn = document.getElementById("enterBtn");
+input.addEventListener("input", () => {
+  input.value = input.value.toUpperCase();
+  enterBtn.disabled = input.value.trim() === "";
+});
+function savePseudo() { data.pseudo = input.value.trim(); save(); init(); }
 
-/* ===== ACTIONS ===== */
-function vibrate(pattern){
-  if(navigator.vibrate) navigator.vibrate(pattern);
-}
-function animate(btn,c){
-  btn.classList.remove("animate","rage");
-  void btn.offsetWidth;
-  if(c>=10){
-    btn.classList.add("rage");
-    vibrate([100,50,100,50,200]);
-  }else{
-    btn.classList.add("animate");
-    vibrate(50);
+function showPage(p) {
+  if (!data.pseudo && p !== "login") return;
+  document.querySelectorAll(".page").forEach(e => e.classList.remove("active"));
+  document.getElementById("page-" + p).classList.add("active");
+  if (p === "stats") {
+    checkRewards(); 
+    renderStats();
   }
+}
+
+function vibrate(pattern) { if (navigator.vibrate) navigator.vibrate(pattern); }
+function animate(btn, c) {
+  btn.classList.remove("animate", "rage");
+  void btn.offsetWidth;
+  if (c >= 10) { btn.classList.add("rage"); vibrate([200, 100, 200]); }
+  else { btn.classList.add("animate"); vibrate(70); }
   updateDerapage();
 }
 
-function addBeer(){
-  data.history.push({type:"beer",time:Date.now()});
-  const c=getStats().today.b;
-  beerMessage.innerText=beerMsgs[Math.min(c-1,beerMsgs.length-1)];
-  beerCount.innerText=c;
-  playTrumpet(c>=6);
-  animate(beerBtn,c);
+function addBeer() {
+  data.history.push({ type: "beer", time: Date.now() });
+  const c = getStats().today.b;
+  document.getElementById("beerMessage").innerText = beerMsgs[Math.min(c - 1, beerMsgs.length - 1)];
+  document.getElementById("beerCount").innerText = c;
+  playGlassSound(c);
+  animate(document.getElementById("beerBtn"), c);
   save();
 }
-function addSmoke(){
-  data.history.push({type:"smoke",time:Date.now()});
-  const c=getStats().today.s;
-  smokeMessage.innerText=smokeMsgs[Math.min(c-1,smokeMsgs.length-1)];
-  smokeCount.innerText=c;
-  playExplosion(c>=6);
-  animate(smokeBtn,c);
+function addSmoke() {
+  data.history.push({ type: "smoke", time: Date.now() });
+  const c = getStats().today.s;
+  document.getElementById("smokeMessage").innerText = smokeMsgs[Math.min(c - 1, smokeMsgs.length - 1)];
+  document.getElementById("smokeCount").innerText = c;
+  playSmokeSound(c);
+  animate(document.getElementById("smokeBtn"), c);
   save();
 }
 
-/* ===== RESET ===== */
-function resetPeriod(type){
-  if(!confirm("Confirmer ?"))return;
-  const n=new Date();
-  const from={day:startDay(n),week:startWeek(n),month:startMonth(n),year:startYear(n)}[type];
-  data.history=data.history.filter(e=>e.time<from);
-  save();init();
+function askReset(type) {
+  showConfirm("Confirmation", "Voulez-vous réinitialiser cette période ?", () => {
+    const n = new Date();
+    const from = { day: startDay(n), week: startWeek(n), month: startMonth(n), year: startYear(n) }[type];
+    data.history = data.history.filter(e => e.time < from);
+    save(); init();
+  });
 }
-function deleteAccount(){
-  if(confirm("SUPPRIMER ?")){
+function askDelete() {
+  showConfirm("⚠️ DANGER ⚠️", "Supprimer définitivement votre compte ?", () => {
     localStorage.clear();
-    location.reload();
-  }
+    data = { history: [], stars: 0, clovers: 0, lastRewardDate: "" }; 
+    input.value = "";
+    enterBtn.disabled = true;
+    init();
+  });
 }
 
-function init(){
-  if(!data.pseudo){
+function init() {
+  if (!data.pseudo) {
     showPage("login");
-  }else{
-    welcome.innerText="SALUT "+data.pseudo+" 🍻";
-    beerCount.innerText=getStats().today.b;
-    smokeCount.innerText=getStats().today.s;
+  } else {
+    document.getElementById("welcome").innerText = "SALUT " + data.pseudo + " 🍻";
+    document.getElementById("beerCount").innerText = getStats().today.b;
+    document.getElementById("smokeCount").innerText = getStats().today.s;
+    document.getElementById("beerMessage").innerText = "🍺";
+    document.getElementById("smokeMessage").innerText = "🚬";
     updateDerapage();
     showPage("action");
   }
